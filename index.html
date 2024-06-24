@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scenes</title>
+</head>
+
+<body>
+    <canvas id='canvas' style="width: 600px; height:400px;"></canvas>
+    <script type="module">
+        import { Scene } from './src/Scene'
+
+
+        init(6)
+
+        async function init(type = 0) {
+            let a_max = 0;
+
+            console.log("start building!", new Date().toLocaleTimeString('en-US'))
+
+            let canvas = document.querySelector('#canvas')
+            var width = canvas.clientWidth;
+            var height = canvas.clientHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            console.time("ray render")
+
+            let imageData;
+            switch (type) {
+                case 0:
+                    imageData = Scene.bvh(width, height)
+                case 1:
+                    imageData = await Scene.earth_texture(width, height)
+                    break;
+                case 2:
+                    imageData = Scene.checkered_spheres(width, height)
+                    break;
+                case 3:
+                    imageData = Scene.quads(width, height)
+                    break;
+                case 4:
+                    imageData = Scene.perlin_sphere(width, height)
+                    break;
+                case 5:
+                    imageData = Scene.simple_light(width, height)
+                    break;
+                case 6:
+                    imageData = Scene.cornell_box(width, height)
+                    break;
+                case 7:
+                    imageData = Scene.cornell_smoke(width, height)
+                    break;
+                default:
+                    break;
+            }
+
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "rgba(0,0,0,1.0)";
+            ctx.fillRect(0, 0, width, height);
+            ctx.putImageData(imageData, 0, 0);
+            console.timeEnd("ray render")
+
+            console.log("done!", new Date().toLocaleTimeString('en-US'))
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
